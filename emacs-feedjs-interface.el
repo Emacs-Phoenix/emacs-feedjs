@@ -26,8 +26,18 @@
   (interactive)
   (save-excursion
     (with-current-buffer feedjs--input-buffer
-      (message (json-read-from-string (buffer-string)))))
-  )
+      (let ((json-object-type 'plist))
+                                        ;(message (json-read-from-string (buffer-string)))
+        (message (plist-get (json-read-from-string (buffer-string)) ':title))
+        (goto-char (point-min))
+        (delete-region (point-min) (line-end-position))
+        (goto-char (point-min))
+        (delete-char 1)
+                                        ;god
+        (if (> (buffer-size) 7)
+            (extraction-entry-from-buffer))
+        ))))
+
 
 
 (provide 'emacs-feedjs-interface)
