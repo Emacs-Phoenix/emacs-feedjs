@@ -1,13 +1,16 @@
-(require 'emcas-feedjs-mode)
+;;(require 'emcas-feedjs-search)
+
+
+
 
 ;;;###autoload
 (defun feedjs ()
   "Enter elfeed."
   (interactive)
-  (switch-to-buffer (feedjs-mode-buffer))
+  (switch-to-buffer (feedjs-search-buffer))
   (unless (eq major-mode 'emacs-feedjs-mode)
-    (emacs-feedjs))
-  ;TODO
+    (feedjs-search-mode))
+  ;;TODO
   )
 
 
