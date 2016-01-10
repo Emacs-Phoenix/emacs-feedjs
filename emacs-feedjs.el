@@ -1,7 +1,12 @@
-;;(require 'emcas-feedjs-search)
 
 
+(provide 'emacs-feedjs)
 
+(require 'emacs-feedjs-lib)
+(require 'emacs-feedjs-interface)
+(require 'emacs-feedjs-search)
+(require 'emacs-feedjs-mode)
+(require 'emacs-feedjs-show)
 
 ;;;###autoload
 (defun feedjs ()
@@ -14,4 +19,4 @@
   )
 
 
-(provide 'emacs-feedjs)
+

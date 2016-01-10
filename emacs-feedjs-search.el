@@ -20,6 +20,12 @@
   "Face used in search mode for unread entry titles."
   :group 'feedjs)
 
+(defface feedjs-search-author-face
+  '((((class color) (background light)) (:foreground "#aa0"))
+    (((class color) (background dark))  (:foreground "#982Baa")))
+  "Face used in search mode for feed titles."
+  :group 'feedjs)
+
 (defface feedjs-search-feed-face
   '((((class color) (background light)) (:foreground "#aa0"))
     (((class color) (background dark))  (:foreground "#ff0")))
@@ -31,6 +37,14 @@
     (((class color) (background dark))  (:foreground "#0f0")))
   "Face used in search mode for tags."
   :group 'feedjs)
+
+(defface feedjs-search-ascii-face
+  '((((class color) (background light)) (:foreground "#070"))
+    (((class color) (background dark))  (:foreground "#25E70f")))
+  "Face used in search mode for tags."
+  :group 'feedjs)
+
+
 
 (defvar feedjs-search-mode-map
   (let ((map (make-sparse-keymap)))
@@ -45,6 +59,13 @@
 
 (defvar feedjs-search-pre-entries ()
   "预备队列")
+
+(defvar feedjs-search-trailing-width 30
+  "Space reserved for displaying the feed end tag information.")
+
+(defvar feedjs-search-title-min-width 16)
+
+(defvar feedjs-search-title-max-width 70)
 
 (defun feedjs-add-entries (entry)
   (setf feedjs-search-entries
@@ -73,18 +94,39 @@
   (feedjs-search-insert-header-text
    "Feedjs Search..."))
 
+
+
+
 (defun feedjs-search-entry-print (entry)
   "Print ENTRY to the buffer."
   (with-current-buffer (feedjs-search-buffer)
-    (let ((title (plist-get entry ':title))
-          (date (plist-get entry ':date))
-          (author (plist-get entry ':author))
-          (link (plist-get entry ':link))
-          (content (plist-get entry ':content)))
-      ;;(insert (propertize title 'face 'feedjs-search-date-face) " ")
-      (message "title")
-      (insert title)
-      (insert "\n"))))
+    
+    (let* ((title (plist-get entry ':title))
+           (date (substring (plist-get entry ':date) 5 19))
+           (author (plist-get entry ':author))
+           (link (plist-get entry ':link))
+           (content (plist-get entry ':content))
+
+           ;;TODO add title unread faces and read faces
+           ;;(title-faces (if ()))
+           (title-width (- (window-width) 10 feedjs-search-trailing-width))
+           (title-column (feedjs-format-column
+                          title (feedjs-clamp
+                                 feedjs-search-title-min-width
+                                 title-width
+                                 feedjs-search-title-max-width)
+                          :left)))
+      
+      (insert (propertize "⊙ " 'face 'feedjs-search-ascii-face))
+      (insert (propertize date 'face 'feedjs-search-date-face) " ")
+      (insert (propertize title-column 'face 'feedjs-search-unread-title-face) "    ")
+
+      ;; (when title
+      ;;   (insert (propertize title 'face 'feedjs-search-feed-face) " "))
+                                        ;
+      (insert (propertize author 'face 'feedjs-search-author-face) " ")
+      (insert "\n"))
+    ))
 
 (defun feedjs-search-show-entry (entry)
   )

@@ -31,4 +31,4 @@
 
 
 
-(provide 'emcas-feedjs-mode)
+(provide 'emacs-feedjs-mode)

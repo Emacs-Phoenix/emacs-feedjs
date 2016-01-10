@@ -6,7 +6,7 @@
 
 (defvar feedjs--process "/Users/soul/PROJECT/NodeAtom/app.js")
 
-(defvar feedjs--input-buffer "*FeedJs*")
+(defvar feedjs--listen-input-buffer "*FeedJs-Listen-Input*")
 
 (defvar feedjs--process-name "FeedJs")
 
@@ -21,7 +21,7 @@
       (message "feedjs readly running")
     (progn
       (message "start Feedjs Process")
-      (setq feedjs--process (start-process feedjs--process-name feedjs--input-buffer
+      (setq feedjs--process (start-process feedjs--process-name feedjs--listen-input-buffer
                                            "node" feedjs--process "--emacs")))))
 (defun feedjs-process-running? ()
   (interactive)
@@ -42,7 +42,7 @@
 (defun extraction-entry-from-buffer ()
   (interactive)
   (save-excursion
-    (with-current-buffer feedjs--input-buffer
+    (with-current-buffer feedjs--listen-input-buffer
       (let ((json-object-type 'plist))
         ;;(message (json-read-from-string (buffer-string)))
         (feedjs-search-entry-print (json-read-from-string (buffer-string)))
