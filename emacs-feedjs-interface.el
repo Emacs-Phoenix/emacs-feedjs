@@ -45,7 +45,9 @@
     (with-current-buffer feedjs--listen-input-buffer
       (let ((json-object-type 'plist))
         ;;(message (json-read-from-string (buffer-string)))
-        (feedjs-search-entry-print (json-read-from-string (buffer-string)))
+        
+        (feedjs-add-entry (json-read-from-string (buffer-string)))
+        
         ;;(message (plist-get (json-read-from-string (buffer-string)) ':title))
         (goto-char (point-min))
         (delete-region (point-min) (line-end-position))

@@ -1,7 +1,3 @@
-
-
-(provide 'emacs-feedjs)
-
 (require 'emacs-feedjs-lib)
 (require 'emacs-feedjs-interface)
 (require 'emacs-feedjs-search)
@@ -20,3 +16,5 @@
 
 
 
+
+(provide 'emacs-feedjs)
