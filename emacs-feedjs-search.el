@@ -52,8 +52,10 @@
       (suppress-keymap map)
       (define-key map "q" 'qut-window))))
 
-(defvar feedjs-search-entries '(1 2 3)
-  "List of the entries currently on display.")
+
+
+(defvar feedjs-search-entries '())
+
 
 (defvar feedjs-search-to-show-entries ())
 
@@ -70,8 +72,9 @@
 (defun feedjs-add-entry (entry)
   ;; (setf feedjs-search-entries
   ;;       (append '(entry) feedjs-search-entries))
-  
-  (add-to-list 'feedjs-search-entries entry)
+  (with-current-buffer (feedjs-search-buffer)
+    (add-to-list 'feedjs-search-entries entry)
+    )
   )
 
 (defun feedjs-search-mode ()
@@ -114,7 +117,6 @@
                                title-width
                                feedjs-search-title-max-width)
                         :left)))
-    (message title)
     (insert (propertize "⊙ " 'face 'feedjs-search-ascii-face))
     (insert (propertize date 'face 'feedjs-search-date-face) " ")
     (insert (propertize title-column 'face 'feedjs-search-unread-title-face) "    ")
@@ -135,26 +137,27 @@
   )
 
 
-
+(defun print-entries ()
+  (interactive)
+  (message feedjs-search-entries))
 
 
 (defun feedjs-search-redraw-all ()
   (interactive)
-  (with-current-buffer (feedjs-search-buffer)
-    
-    (let ((inhibit-read-only t)
-          (entries feedjs-search-entries))
-      ;;(erase-buffer)      
-      (save-excursion
-        (feedjs-search-insert-header)
-        
-        (dolist (entry elfeed-search-entries)
-          ;;(feedjs-search-entry-print entry)
-          (message (string "s"))
-          )
-        (insert "End of entries.\n")
-        ))
-    )
+
+  (let ((entries feedjs-search-entries))
+    (with-current-buffer (feedjs-search-buffer)
+      
+      (let ((inhibit-read-only t))
+        (erase-buffer)
+        (save-excursion
+          (feedjs-search-insert-header)
+          (dolist (entry entries)
+            (feedjs-search-entry-print entry))
+          (insert "End of entries.\n")
+          ))
+      ))
+  
   )
 
 (defun set-feed-entries ()
