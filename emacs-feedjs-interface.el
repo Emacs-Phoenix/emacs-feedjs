@@ -21,8 +21,8 @@
       (message "feedjs readly running")
     (progn
       (message "start Feedjs Process")
-      (setq feedjs--process (start-process feedjs--process-name feedjs--listen-input-buffer
-                                           "node" feedjs--process "--emacs")))))
+      (setq feedjs--process-var (start-process feedjs--process-name feedjs--listen-input-buffer
+                                               "node" feedjs--process "--emacs")))))
 (defun feedjs-process-running? ()
   (interactive)
   (if feedjs--process-var
@@ -41,22 +41,34 @@
 
 (defun extraction-entry-from-buffer ()
   (interactive)
+  ;;(message "extraction-entry-from-buffer")
   (save-excursion
     (with-current-buffer feedjs--listen-input-buffer
       (let ((json-object-type 'plist))
         ;;(message (json-read-from-string (buffer-string)))
-        
-        (feedjs-add-entry (json-read-from-string (buffer-string)))
-        
-        ;;(message (plist-get (json-read-from-string (buffer-string)) ':title))
-        (goto-char (point-min))
-        (delete-region (point-min) (line-end-position))
-        (goto-char (point-min))
-        (delete-char 1)
-        ;; god seven
-        (if (> (buffer-size) 7)
-            (extraction-entry-from-buffer))
-        ))))
+        (unwind-protect
+            ;; TODO check empty better
+            (if (> (buffer-size) 7)
+                (progn
+                  
+                  (feedjs-add-entry (json-read-from-string (buffer-string)))
+                  
+                  ;;(message (plist-get (json-read-from-string (buffer-string)) ':title))
+                  (goto-char (point-min))
+                  (delete-region (point-min) (line-end-position))
+                  (goto-char (point-min))
+                  (delete-char 1)
+                  ;; TODO
+                  ;; check buffer empty
+                  
+                  ;; god seven
+                  (if (> (buffer-size) 7)
+                      (extraction-entry-from-buffer)))))))))
+
+(defun check-input-buffer-empty ()
+  (interactive)
+  (message (not (eq nil (get-buffer feedjs--listen-input-buffer))))
+  )
 
 
 
