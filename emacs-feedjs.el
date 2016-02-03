@@ -20,8 +20,11 @@
       (fetch-feed-by-process)
       ))
   ;;TODO
+  (start-feedjs-extract-timer)
+  
   )
 
+;; 定时抽取
 (defun start-feedjs-extract-timer ()
   "Start feedjs extract timer."
   (interactive)
@@ -29,7 +32,8 @@
     (progn
       (message "Timer extract-timer start!")
       (setq extract-timer
-            (run-at-time t 60 'extraction-entry-from-buffer)))))
+            (run-at-time t 10 'extraction-entry-from-buffer-to-notify)))))
+
 
 (defun stop-feedjs-extract-timer ()
   "Stop feedjs extract timer."
@@ -40,6 +44,11 @@
       (message "Cancel Timer extract timer."))))
 
 
+(define-prefix-command 'emacs-feed-key-map)
+(global-set-key (kbd "C-c e") 'emacs-feed-key-map)
+(define-key emacs-feed-key-map (kbd "s") 'feedjs)
+(define-key emacs-feed-key-map (kbd "k") 'kill-feedjs-process)
+(define-key emacs-feed-key-map (kbd "r") 'restart-feedjs-process)
 
 
 (provide 'emacs-feedjs)

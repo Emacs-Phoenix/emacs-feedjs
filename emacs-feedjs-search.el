@@ -1,4 +1,4 @@
-
+(require 'emacs-feedjs-show)
 
 (defun feedjs-search-buffer ()
   (get-buffer-create "*feedjs-search*"))
@@ -109,7 +109,7 @@
   "Print ENTRY to the buffer."
   (let* ((title (plist-get entry ':title))
          (date (substring (plist-get entry ':date) 5 19))
-         (author (plist-get entry ':author))
+         (author (concat (plist-get entry ':author) " "))
          (link (plist-get entry ':link))
          (content (plist-get entry ':content))
 
@@ -129,8 +129,9 @@
     ;; (when title
     ;;   (insert (propertize title 'face 'feedjs-search-feed-face) " "))
                                         ;
-    (insert (propertize author 'face 'feedjs-search-author-face) " ")
+    (insert (propertize author 'face 'feedjs-search-author-face))
     (insert "\n")))
+
 
 (defun feedjs-search-show-entry (entry)
   (interactive (list (feedjs-search-selected)))
@@ -172,7 +173,6 @@
 (defun feedjs-search-redraw-all ()
   (interactive)
   (with-current-buffer (feedjs-search-buffer)
-    
     (let ((inhibit-read-only t)
           (entries feedjs-search-entries))
       (erase-buffer)
