@@ -1,11 +1,8 @@
-
-
-
-
 (require 'cl-lib)
 (require 'shr)
 (require 'url-parse)
 (require 'browse-url)
+
 (require 'message) ; faces
 
 
@@ -38,7 +35,7 @@
          (author (concat (plist-get entry ':author) " "))
          (link (plist-get entry ':link))
          (content (plist-get entry ':content))
-
+         
          ;;TODO add title unread faces and read faces
          ;;(title-faces (if ()))
          (title-width (- (window-width) 10 feedjs-search-trailing-width))
@@ -48,14 +45,11 @@
                                title-width
                                feedjs-search-title-max-width)
                         :left)))
-
     (switch-to-buffer (get-buffer-create (format "* feed %s*" title)))
     (unless (eq major-mode 'emacs-feed-show-mode-map)
       (emacs-feed-show-mode))
     (setq emacs-feed-show-entry entry)
-    (feed-show-refresh)
-    )
-  )
+    (feed-show-refresh)))
 
 (defun emacs-feed-libxml-supported-p ()
   "Return non-nil if `libxml-parse-html-region' is available."
@@ -74,6 +68,15 @@
          (libxml-parse-html-region (point-min) (point-max)))
      '(i () "Elfeed: libxml2 functionality is unavailable"))))
 
+(cl-defun feedjs-insert-link (url &optional (content url))
+  "Insert a clickable hyperlink to URL titled CONTENT."
+  (when (and (integerp shr-width)
+             (> (length content) (- shr-width 8)))
+    (let ((len (- (/ shr-width 2) 10)))
+      (setq content (format "%s[...]%s"
+                            (substring content 0 len)
+                            (substring content (- len))))))
+  (emacs-feed-insert-html (format "<a href=\"%s\">%s</a>" url content)))
 
 (defun feed-show-refresh ()
   (interactive)
@@ -99,9 +102,11 @@
     (insert (format (propertize "Date: %s\n" 'face 'message-header-name)
                     (propertize date 'face 'message-header-other)))
     
+    (insert (propertize "Link: " 'face 'message-header-name))
+    (feedjs-insert-link link link)
     (insert "\n")
 
-    (insert (emacs-feed-insert-html content))
+    (emacs-feed-insert-html content)
     (goto-char (point-min))
     )
   )

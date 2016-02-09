@@ -21,7 +21,7 @@
       ))
   ;;TODO
   (start-feedjs-extract-timer)
-  
+  (start-feedjs-notify)
   )
 
 ;; 定时抽取
