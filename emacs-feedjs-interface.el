@@ -5,7 +5,7 @@
 (require 'emacs-feedjs-notifiy)
 (require 'emacs-feedjs-search)
 
-(defvar feedjs--process "/Users/soul/PROJECT/NodeAtom/app.js")
+(defvar feedjs--process "~/PROJECT/NodeAtom/app.js")
 
 (defvar feedjs--listen-input-buffer "*FeedJs-Listen-Input*")
 
@@ -81,8 +81,7 @@
         (unwind-protect
             ;; TODO check empty better
             (if (> (buffer-size) 7)
-                (progn
-                  
+                (progn                  
                   (add-to-feedjs-notify-queue (plist-get (json-read-from-string (buffer-string))
                                                          ':title))
                   ;;(message (plist-get (json-read-from-string (buffer-string)) ':title))
@@ -90,11 +89,9 @@
                   (delete-region (point-min) (line-end-position))
                   (goto-char (point-min))
                   (delete-char 1)
-                  ;; TODO
-                  ;; check buffer empty
-                  
-                  ;; god seven
-                  (if (> (buffer-size) 7)
+                  ;; TODO check-input-buffer-empty 函数 在下面
+                  ;; check buffer empty                  
+                  (if (> (buffer-size) 7) ;; god seven
                       (extraction-entry-from-buffer-to-notify)))))))))
 
 (defun check-input-buffer-empty ()
@@ -106,7 +103,7 @@
 (defun request-server-get-feed (url)
   (request
    ;;"http://localhost:7788/new-unread/1"
-   (concat server-url "/new-unread/" (number-to-string number))
+   url
    :parser 'buffer-string
    :success
    (function* (lambda (&key data &allow-other-keys)
@@ -117,17 +114,14 @@
                     (message (plist-get (elt entries 0) ':date))
                     (feedjs-search-entries-clean)
                     (mapcar (lambda (entry2)
-                              (feedjs-add-entry entry2)) entries))))))
-  )
+                              (feedjs-add-entry entry2)) entries)))))))
 
-(defun get-new-unread-feed-from-server (number)
+(defun new-unread-feed-from-server-url (number)
   (request-server-get-feed
    (concat server-url "/new-unread/" (number-to-string number))))
 
-(defun get-new-feed-from-server (number)
+(defun new-feed-from-server-url (number)
   (request-server-get-feed
    (concat server-url "/new/" (number-to-string number))))
-
-
 
 (provide 'emacs-feedjs-interface)

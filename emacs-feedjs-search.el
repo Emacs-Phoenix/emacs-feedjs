@@ -67,14 +67,13 @@
   (with-current-buffer (feedjs-search-buffer)
     (add-to-list 'feedjs-search-entries entry)))
 
-
-
 (defvar feedjs-search-mode-map
   (let ((map (make-sparse-keymap)))
     (prog1 map
       (suppress-keymap map)
       (define-key map "q" 'quit-window)
       (define-key map (kbd "RET") 'feedjs-search-show-entry)
+      (define-key map (kbd "r") 'feedjs-search-refresh)
       (define-key map "m" 'feedjs-search-show-entry))))
 
 (defun feedjs-search-mode ()
@@ -166,5 +165,8 @@
           (feedjs-search-entry-print entry))
         (insert "End of entries.\n")
         ))))
+
+(defun feedjs-search-refresh ()
+  (interactive))
 
 (provide 'emacs-feedjs-search)

@@ -1,6 +1,4 @@
 
-
-
 (defun feedjs-format-column (string width &optional align)
   "Return STRING truncated or padded to WIDTH following ALIGNment
  Align should be a keyword :left or :right."
