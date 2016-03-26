@@ -1,6 +1,6 @@
 (require 'emacs-feedjs-show)
 
-(require 'emacs-feedjs-show)
+(require 'emacs-feedjs-interface)
 
 (defun feedjs-search-buffer ()
   (get-buffer-create "*feedjs-search*"))
@@ -74,6 +74,7 @@
       (define-key map "q" 'quit-window)
       (define-key map (kbd "RET") 'feedjs-search-show-entry)
       (define-key map (kbd "r") 'feedjs-search-refresh)
+      (define-key map (kbd "u") 'feedjs-search-fetch-unread-new)
       (define-key map "m" 'feedjs-search-show-entry))))
 
 (defun feedjs-search-mode ()
@@ -122,7 +123,7 @@
     (insert (propertize "⊙ " 'face 'feedjs-search-ascii-face))
     (insert (propertize date 'face 'feedjs-search-date-face) " ")
     (insert (propertize title-column 'face 'feedjs-search-unread-title-face) "    ")
-
+    
     ;; (when title
     ;;   (insert (propertize title 'face 'feedjs-search-feed-face) " "))
                                         ;
@@ -167,6 +168,17 @@
         ))))
 
 (defun feedjs-search-refresh ()
-  (interactive))
+  (interactive)
+  (feedjs-search-redraw-all))
+
+(defun put-responese-to-list (entries)
+  (interactive)
+  (mapcar (lambda (entry)
+            (feedjs-add-entry entry))
+          entries))
+
+(defun feedjs-search-fetch-unread-new ()
+  (interactive)
+  (new-unread-feed-from-server-url 50 #'put-responese-to-list))
 
 (provide 'emacs-feedjs-search)
