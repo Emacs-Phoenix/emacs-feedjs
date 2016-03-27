@@ -1,0 +1,3 @@
+[submodule "NodeAtom"]
+	path = NodeAtom
+	url = git@github.com:A-Horse/NodeAtom.git

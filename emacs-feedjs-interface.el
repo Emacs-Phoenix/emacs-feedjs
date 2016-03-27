@@ -1,14 +1,12 @@
 (require 'json)
 (require 'request)
 (require 'emacs-feedjs-notifiy)
-(require 'emacs-feedjs-search)
 
 (setq feedjs--process "/Users/soul/PROJECT/NodeAtom/app.js")
 
 (defvar feedjs--listen-input-buffer "*FeedJs-Listen-Input*")
 
 (defvar feedjs--process-name "FeedJs")
-
 
 (defvar feedjs--process-var nil)
 
@@ -114,6 +112,7 @@
                          (entries (plist-get
                                    (json-read-from-string data) ':result)))
                     (feedjs-search-entries-clean)
+
                     (mapcar (lambda (entry)
                               (message entry)
                               (feedjs-add-entry entry))

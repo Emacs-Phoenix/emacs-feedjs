@@ -1,6 +1,8 @@
 (require 'emacs-feedjs-show)
 
 
+(defvar feedjs-search-show-n 50)
+
 (defun feedjs-search-buffer ()
   (get-buffer-create "*feedjs-search*"))
 
@@ -73,8 +75,7 @@
       (define-key map "q" 'quit-window)
       (define-key map (kbd "RET") 'feedjs-search-show-entry)
       (define-key map (kbd "r") 'feedjs-search-refresh)
-      (define-key map (kbd "u") 'feedjs-search-fetch-unread-new)
-      (define-key map (kbd "n") 'feedjs-search-fetch-new)
+      (define-key map (kbd "u") 'feedjs-search-fetch-unread)
       (define-key map "m" 'feedjs-search-show-entry))))
 
 (defun feedjs-search-mode ()
@@ -173,27 +174,26 @@
   (interactive)
   (feedjs-search-redraw-all))
 
+
 (defun put-responese-to-list (entries)
   (interactive)
-  (message "shit")
+
   (mapcar (lambda (entry)
             (message entry)
             (feedjs-add-entry entry))
           entries))
 
 
-;; (defun feedjs-search-fetch-unread-new ()
-;;   (interactive)
-;;   (message "feedjs-search-fetch-unread-new")
-;;   (new-unread-feed-from-server-url 10 #'put-responese-to-list))
-
-(defun feedjs-search-fetch-unread-new ()
-  (interactive)
-  (new-unread-feed-from-server-url 10))
 
 (defun feedjs-search-fetch-new ()
   (interactive)
-  (message "feedjs-search-fetch-new")
-  (new-unread-feed-from-server-url 10))
+  (message "feedjs search fetch new")
+  (new-unread-feed-from-server-url feedjs-search-show-n)))
+
+(defun feedjs-search-fetch-unread ()
+  (interactive)
+  (message "feedjs search fetch unread")
+  (new-unread-feed-from-server-url feedjs-search-show-n))
+
 
 (provide 'emacs-feedjs-search)

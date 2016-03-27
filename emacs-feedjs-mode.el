@@ -9,15 +9,16 @@
       (define-key map "q" 'quit-window)))
   "Keymap for emacs-feedjs-mode.")
 
-(defun feedjs-show-entry (entry)
-  "Display ENTRY in the current buffer."
-  
-  (let ((title (plist-get entry ':title)))
-    (switch-to-buffer (get-buffer-create (format "*feedjs %s" title)))
-    (unless (eq major-mode 'emacs-feedjs-mode)
-      (emacs-feedjs-mode))
-    (setq emacs-feedjs-entry entry)
-    (emacs-feedjs-mode-refresh)))
+
+;; (defun feedjs-show-entry (entry)
+;;   "Display ENTRY in the current buffer."
+;;   (let ((title (plist-get entry ':title)))
+;;     (switch-to-buffer (get-buffer-create (format "*feedjs %s" title)))
+;;     (unless (eq major-mode 'emacs-feedjs-mode)
+;;       (emacs-feedjs-mode))
+;;     (setq emacs-feedjs-entry entry)
+;;     (emacs-feedjs-mode-refresh)))
+
 
 (defun emacs-feedjs-mode ()
   "Magor mode for listing feed."
