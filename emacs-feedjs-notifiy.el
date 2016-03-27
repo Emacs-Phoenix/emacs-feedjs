@@ -11,6 +11,7 @@
 
 (defun start-feedjs-notify ()
   (interactive)
+  (message "start feedjs notify")
   (unless notify-timer
     (progn
       (message "Start notify feedjs")

@@ -11,6 +11,7 @@
 
 (defun feedjs-show-entry (entry)
   "Display ENTRY in the current buffer."
+  
   (let ((title (plist-get entry ':title)))
     (switch-to-buffer (get-buffer-create (format "*feedjs %s" title)))
     (unless (eq major-mode 'emacs-feedjs-mode)

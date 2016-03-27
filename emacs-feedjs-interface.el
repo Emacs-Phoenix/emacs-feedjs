@@ -1,9 +1,7 @@
 (require 'json)
-
 (require 'request)
-
 (require 'emacs-feedjs-notifiy)
-;;(require 'emacs-feedjs-search)
+(require 'emacs-feedjs-search)
 
 (setq feedjs--process "/Users/soul/PROJECT/NodeAtom/app.js")
 
@@ -100,7 +98,9 @@
 
 ;;(setq response-buffer "*feedjs-response-buffer*")
 
-(defun request-server-get-feed (url fn)
+(defun request-server-get-feed (url)
+  (message "request")
+
   (request
    ;;"http://localhost:7788/new-unread/1"
    url
@@ -108,22 +108,22 @@
    :success
    (function* (lambda (&key data &allow-other-keys)
                 (when data
+
+
                   (let* ((json-object-type 'plist)
-                         (entries
-                          (plist-get (json-read-from-string data) ':result)))
-                    (message (plist-get (elt entries 0) ':date))
+                         (entries (plist-get
+                                   (json-read-from-string data) ':result)))
                     (feedjs-search-entries-clean)
-                    ;; (mapcar (lambda (entry)
-                    ;;           (feedjs-add-entry entry))
-                    ;;         entries)
-                    ;;(funcall fn entries)
-                    ))))))
+                    (mapcar (lambda (entry)
+                              (message entry)
+                              (feedjs-add-entry entry))
+                            entries)))))))
 
-(defun new-unread-feed-from-server-url (number fn)
+(defun new-unread-feed-from-server-url (number)
   (request-server-get-feed
-   (concat server-url "/new-unread/" (number-to-string number)) fn))
+   (concat server-url "/new-unread/" (number-to-string number))))
 
-(defun new-feed-from-server-url (number)
+(defun new-feed-from-server-url (number fn)
   (request-server-get-feed
    (concat server-url "/new/" (number-to-string number))))
 
