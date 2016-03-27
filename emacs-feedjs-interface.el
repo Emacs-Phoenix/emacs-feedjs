@@ -110,7 +110,6 @@
                          (entries (plist-get
                                    (json-read-from-string data) ':result)))
                     (feedjs-search-entries-clean)
-
                     (mapcar (lambda (entry)
                               (message entry)
                               (feedjs-add-entry entry))

@@ -175,24 +175,8 @@
   (feedjs-search-redraw-all))
 
 
-(defun put-responese-to-list (entries)
-  (interactive)
-
-  (mapcar (lambda (entry)
-            (message entry)
-            (feedjs-add-entry entry))
-          entries))
-
-
-
-(defun feedjs-search-fetch-new ()
-  (interactive)
-  (message "feedjs search fetch new")
-  (new-unread-feed-from-server-url feedjs-search-show-n))
-
 (defun feedjs-search-fetch-unread ()
   (interactive)
-  (message "feedjs search fetch unread")
   (new-unread-feed-from-server-url feedjs-search-show-n))
 
 
