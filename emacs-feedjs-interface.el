@@ -97,8 +97,6 @@
 ;;(setq response-buffer "*feedjs-response-buffer*")
 
 (defun request-server-get-feed (url)
-  (message "request")
-
   (request
    ;;"http://localhost:7788/new-unread/1"
    url

@@ -1,7 +1,5 @@
 
 
-
-
 (defvar emacs-feedjs-mode-map
   (let ((map (make-sparse-keymap)))
     (prog1 map

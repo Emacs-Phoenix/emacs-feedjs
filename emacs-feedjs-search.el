@@ -188,7 +188,7 @@
 (defun feedjs-search-fetch-new ()
   (interactive)
   (message "feedjs search fetch new")
-  (new-unread-feed-from-server-url feedjs-search-show-n)))
+  (new-unread-feed-from-server-url feedjs-search-show-n))
 
 (defun feedjs-search-fetch-unread ()
   (interactive)
