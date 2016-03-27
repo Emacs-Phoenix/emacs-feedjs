@@ -3,9 +3,9 @@
 (require 'request)
 
 (require 'emacs-feedjs-notifiy)
-(require 'emacs-feedjs-search)
 
-(defvar feedjs--process "~/PROJECT/NodeAtom/app.js")
+
+(setq feedjs--process "/Users/soul/PROJECT/NodeAtom/app.js")
 
 (defvar feedjs--listen-input-buffer "*FeedJs-Listen-Input*")
 
@@ -114,7 +114,8 @@
                     (message (plist-get (elt entries 0) ':date))
                     (feedjs-search-entries-clean)
                     (mapcar (lambda (entry2)
-                              (feedjs-add-entry entry2)) entries)))))))
+                              (feedjs-add-entry entry2))
+                            entries)))))))
 
 (defun new-unread-feed-from-server-url (number)
   (request-server-get-feed

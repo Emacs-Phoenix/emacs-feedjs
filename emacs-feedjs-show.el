@@ -11,16 +11,16 @@
   (let ((map (make-sparse-keymap)))
     (prog1 map
       (suppress-keymap map)
-      (define-key map "q" 'elfeed-kill-buffer) 
+      (define-key map "q" 'quit-window)
       ))
-  "Keymap for `elfeed-show-mode'.")
+  )
 
 (defun emacs-feed-show-mode ()
   "Mode for displaying Elfeed feed entries.
 \\{elfeed-show-mode-map}"
   (interactive)
   (kill-all-local-variables)
-  (use-local-map elfeed-show-mode-map)
+  (use-local-map emacs-feed-show-mode-map)
   (setq major-mode 'emacs-feed-show-mode-map
         mode-name "emacs-feed-show"
         buffer-read-only t)
@@ -65,7 +65,8 @@
          ;; insert <base> to work around libxml-parse-html-region bug
          
          (insert html)
-         (libxml-parse-html-region (point-min) (point-max)))
+         (libxml-parse-html-region (point-min) (point-max))
+         )
      '(i () "Elfeed: libxml2 functionality is unavailable"))))
 
 (cl-defun feedjs-insert-link (url &optional (content url))
@@ -77,6 +78,10 @@
                             (substring content 0 len)
                             (substring content (- len))))))
   (emacs-feed-insert-html (format "<a href=\"%s\">%s</a>" url content)))
+
+(defun erase-junk-char ()
+  (while (re-search-forward "" nil t)
+    (replace-match "")))
 
 (defun feed-show-refresh ()
   (interactive)
@@ -103,10 +108,14 @@
                     (propertize date 'face 'message-header-other)))
     
     (insert (propertize "Link: " 'face 'message-header-name))
+
     (feedjs-insert-link link link)
     (insert "\n")
 
     (emacs-feed-insert-html content)
+    
+    (goto-char (point-min))
+    (erase-junk-char)
     (goto-char (point-min))
     )
   )
