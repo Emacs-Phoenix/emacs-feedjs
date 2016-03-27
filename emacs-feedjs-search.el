@@ -47,6 +47,50 @@
   :group 'feedjs)
 
 
+
+;;---
+(defface feedjs-search-date-face-b
+  '((((class color) (background light)) (:foreground "#aaa" :background "#a0ee76"))
+    (((class color) (background dark))  (:foreground "#77a" :background "#a0ee76")))
+  "Face used in search mode for dates."
+  :group 'feedjs)
+
+(defface feedjs-search-title-face-b
+  '((((class color) (background light)) (:foreground "#000" :background "#a0ee76"))
+    (((class color) (background dark))  (:foreground "#fff" :background "#a0ee76")))
+  "Face used in search mode for titles."
+  :group 'feedjs)
+
+(defface feedjs-search-unread-title-face-b
+  '((t :inherit feedjs-search-title-face :weight bold :background "#a0ee76"))
+  "Face used in search mode for unread entry titles."
+  :group 'feedjs)
+
+(defface feedjs-search-author-face-b
+  '((((class color) (background light)) (:foreground "#aa0" :background "#a0ee76"))
+    (((class color) (background dark))  (:foreground "#982Baa" :background "#a0ee76")))
+  "Face used in search mode for feed titles."
+  :group 'feedjs)
+
+(defface feedjs-search-feed-face-b
+  '((((class color) (background light)) (:foreground "#aa0" :background "#a0ee76"))
+    (((class color) (background dark))  (:foreground "#ff0" :background "#a0ee76")))
+  "Face used in search mode for feed titles."
+  :group 'feedjs)
+
+(defface feedjs-search-tag-face-b
+  '((((class color) (background light)) (:foreground "#070" :background "#a0ee76"))
+    (((class color) (background dark))  (:foreground "#0f0" :background "#a0ee76")))
+  "Face used in search mode for tags."
+  :group 'feedjs)
+
+(defface feedjs-search-ascii-face-b
+  '((((class color) (background light)) (:foreground "#070" :background "#a0ee76"))
+    (((class color) (background dark))  (:foreground "#25E70f" :background "#a0ee76")))
+  "Face used in search mode for tags."
+  :group 'feedjs)
+;;---
+
 (defvar feedjs-search--offset 2
   "Offset between line numbers and entry list position.")
 
@@ -75,7 +119,6 @@
       (define-key map (kbd "RET") 'feedjs-search-show-entry)
       (define-key map (kbd "r") 'feedjs-search-refresh)
       (define-key map (kbd "u") 'feedjs-search-fetch-unread)
-      
       (define-key map "m" 'feedjs-search-show-entry))))
 
 (defun feedjs-search-mode ()
@@ -101,7 +144,7 @@
   (feedjs-search-insert-header-text
    "Feedjs Search...\n"))
 
-(defun feedjs-search-entry-print (entry)
+(defun feedjs-search-entry-print (entry cn)
   "Print ENTRY to the buffer."
   ;;(substring (plist-get entry ':date) 5 19)
   (let* ((title (plist-get entry ':title))
@@ -121,15 +164,25 @@
                                title-width
                                feedjs-search-title-max-width)
                         :left)))
-    (insert (propertize "⊙ " 'face 'feedjs-search-ascii-face))
-    (insert (propertize date 'face 'feedjs-search-date-face) " ")
-    (insert (propertize title-column 'face 'feedjs-search-unread-title-face) "    ")
-
-    ;; (when title
-    ;;   (insert (propertize title 'face 'feedjs-search-feed-face) " "))
-                                        ;
-    (insert (propertize author 'face 'feedjs-search-author-face))
-    (insert "\n")))
+    (message (number-to-string cn))
+    (if (= (% cn 2) 0)
+        (progn
+          (insert (propertize "⊙ " 'face 'feedjs-search-ascii-face))
+          (insert (propertize date 'face 'feedjs-search-date-face) " ")
+          (insert (propertize title-column 'face 'feedjs-search-unread-title-face) "    ")
+          
+          (insert "\n")
+          (insert (propertize author 'face 'feedjs-search-author-face))
+          (insert "\n"))
+      (progn
+        (insert (propertize "⊙ " 'face 'feedjs-search-ascii-face-b))
+        (insert (propertize date 'face 'feedjs-search-date-face-b) " ")
+        (insert (propertize title-column 'face 'feedjs-search-unread-title-face-b) "    ")
+        
+        (insert "\n")
+        (insert (propertize author 'face 'feedjs-search-author-face-b))
+        (insert "\n")
+        ))))
 
 
 (defun feedjs-search-show-entry (entry)
@@ -141,8 +194,8 @@
 (defun feedjs-search-selected ()
   (let* ((line-index (line-number-at-pos))
          (offset (- line-index feedjs-search--offset)))
-    (when (and (>= offset 0) (nth offset feedjs-search-entries))
-      (nth offset feedjs-search-entries))))
+    (when (and (>= offset 0) (nth (/ offset 2) feedjs-search-entries))
+      (nth (/ offset 2) feedjs-search-entries))))
 
 
 (defun feedjs-search-entries-clean ()
@@ -159,12 +212,14 @@
   (interactive)
   (with-current-buffer (feedjs-search-buffer)
     (let ((inhibit-read-only t)
-          (entries feedjs-search-entries))
+          (entries feedjs-search-entries)
+          (cn 0))
       (erase-buffer)
       (save-excursion
         (feedjs-search-insert-header)
         (dolist (entry entries)
-          (feedjs-search-entry-print entry))
+          (feedjs-search-entry-print entry cn)
+          (setq cn (+ cn 1)))
         (insert "End of entries.\n")
         ))))
 
@@ -175,5 +230,9 @@
 (defun feedjs-search-fetch-unread ()
   (interactive)
   (new-unread-feed-from-server-url feedjs-search-show-n))
+
+(defun feedjs-search-new ()
+  (interactive)
+  (new-feed-from-server-url feedjs-search-show-n))
 
 (provide 'emacs-feedjs-search)

@@ -5,7 +5,8 @@
 (require 'emacs-feedjs-notifiy)
 
 
-(setq feedjs--process "/Users/soul/PROJECT/NodeAtom/app.js")
+(defvar feedjs--process (expand-file-name "site-lisp/emacs-feedjs/NodeAtom/app.js"
+                                          user-emacs-directory))
 
 (defvar feedjs--listen-input-buffer "*FeedJs-Listen-Input*")
 
@@ -72,33 +73,50 @@
 ;;                   (if (> (buffer-size) 7)
 ;;                       (extraction-entry-from-buffer)))))))))
 
-(defun extraction-entry-from-buffer-to-notify ()
-  (interactive)
+(defun extraction-entry-from-buffer (add-fn)
+  (message "exx")
   (save-excursion
     (with-current-buffer feedjs--listen-input-buffer
       (let ((json-object-type 'plist))
         ;;(message (json-read-from-string (buffer-string)))
         (unwind-protect
             ;; TODO check empty better
-            (if (> (buffer-size) 7)
-                (progn                  
-                  (add-to-feedjs-notify-queue (plist-get (json-read-from-string (buffer-string))
-                                                         ':title))
-                  ;;(message (plist-get (json-read-from-string (buffer-string)) ':title))
-                  (goto-char (point-min))
-                  (delete-region (point-min) (line-end-position))
-                  (goto-char (point-min))
-                  (delete-char 1)
-                  ;; TODO check-input-buffer-empty 函数 在下面
-                  ;; check buffer empty                  
-                  (if (> (buffer-size) 7) ;; god seven
-                      (extraction-entry-from-buffer-to-notify)))))))))
+            
+            ;; (if (> (buffer-size) 7)
+            ;;     (progn                  
+            ;;       (add-to-feedjs-notify-queue (plist-get (json-read-from-string (buffer-string))
+            ;;                                              ':title))
+            ;;       ;;(message (plist-get (json-read-from-string (buffer-string)) ':title))
+            ;;       (goto-char (point-min))
+            ;;       (delete-region (point-min) (line-end-position))
+            ;;       (goto-char (point-min))
+            ;;       (delete-char 1)
+            ;;       ;; TODO check-input-buffer-empty 函数 在下面
+            ;;       ;; check buffer empty                  
+            ;;       (if (> (buffer-size) 7) ;; god seven
+            ;;           (extraction-entry-from-buffer-to-notify))))
+          
+            (when (check-input-buffer-empty)
+              (message "not")
+              (progn
+                (funcall add-fn (plist-get (json-read-from-string (buffer-string))
+                                                       ':title))
+                (goto-char (point-min))
+                (delete-region (point-min) (line-end-position))
+                (goto-char (point-min))
+                (delete-char 1)
+
+                (extraction-entry-from-buffer add-fn)
+                )))))))
 
 (defun check-input-buffer-empty ()
-  (interactive)
-  (message (not (eq nil (get-buffer feedjs--listen-input-buffer)))))
+  "检查程序输入 buffer 是否为空"
+  ;;(not (eq nil (get-buffer feedjs--listen-input-buffer)))
+  (> (buffer-size) 0))
 
-;;(setq response-buffer "*feedjs-response-buffer*")
+(defun check-input-buffer-not-empty ()
+  "检查程序输入 buffer 是否不为空"
+  (not (check-input-buffer-empty)))
 
 (defun request-server-get-feed (url)
   (request
