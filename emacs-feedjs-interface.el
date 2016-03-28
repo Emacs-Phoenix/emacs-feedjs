@@ -5,7 +5,7 @@
 (require 'emacs-feedjs-notifiy)
 
 
-(defvar feedjs--process (expand-file-name "site-lisp/emacs-feedjs/NodeAtom/app.js"
+(defvar feedjs--process (expand-file-name "NodeAtom/app.js"
                                           user-emacs-directory))
 
 (defvar feedjs--listen-input-buffer "*FeedJs-Listen-Input*")
