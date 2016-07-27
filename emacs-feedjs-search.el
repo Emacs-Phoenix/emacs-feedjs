@@ -165,6 +165,7 @@
                                feedjs-search-title-max-width)
                         :left)))
     (message (number-to-string cn))
+    (message title)
     (if (= (% cn 2) 0)
         (progn
           (insert (propertize "⊙ " 'face 'feedjs-search-ascii-face))
