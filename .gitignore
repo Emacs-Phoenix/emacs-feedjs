@@ -1,15 +1,10 @@
 node_modules
+test
 .tern-port
-test/
 .DS_Store
 build
-GPATH
-GRTAGS
-GSYMS
-GTAGS
 *.swp
-#*
 \#*
-*#
 tags
 *~
+*.elc
