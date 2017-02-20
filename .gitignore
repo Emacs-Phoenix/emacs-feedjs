@@ -4,6 +4,7 @@ test
 .DS_Store
 build
 *.swp
+*.elc
 \#*
 tags
 *~
