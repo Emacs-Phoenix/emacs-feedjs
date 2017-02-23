@@ -5,8 +5,6 @@
 
 (require 'message) ; faces
 
-
-
 (defvar emacs-feed-show-mode-map
   (let ((map (make-sparse-keymap)))
     (prog1 map
@@ -35,7 +33,7 @@
          (author (concat (plist-get entry ':author) " "))
          (link (plist-get entry ':link))
          (content (plist-get entry ':content))
-         
+
          ;;TODO add title unread faces and read faces
          ;;(title-faces (if ()))
          (title-width (- (window-width) 10 feedjs-search-trailing-width))
@@ -63,7 +61,7 @@
    (if (emacs-feed-libxml-supported-p)
        (with-temp-buffer
          ;; insert <base> to work around libxml-parse-html-region bug
-         
+
          (insert html)
          (libxml-parse-html-region (point-min) (point-max))
          )
@@ -106,14 +104,14 @@
                     (propertize title 'face 'message-header-subject)))
     (insert (format (propertize "Date: %s\n" 'face 'message-header-name)
                     (propertize date 'face 'message-header-other)))
-    
+
     (insert (propertize "Link: " 'face 'message-header-name))
 
     (feedjs-insert-link link link)
     (insert "\n")
 
     (emacs-feed-insert-html content)
-    
+
     (goto-char (point-min))
     (erase-junk-char)
     (goto-char (point-min))

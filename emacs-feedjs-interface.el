@@ -81,9 +81,9 @@
         ;;(message (json-read-from-string (buffer-string)))
         (unwind-protect
             ;; TODO check empty better
-            
+
             ;; (if (> (buffer-size) 7)
-            ;;     (progn                  
+            ;;     (progn
             ;;       (add-to-feedjs-notify-queue (plist-get (json-read-from-string (buffer-string))
             ;;                                              ':title))
             ;;       ;;(message (plist-get (json-read-from-string (buffer-string)) ':title))
@@ -92,10 +92,10 @@
             ;;       (goto-char (point-min))
             ;;       (delete-char 1)
             ;;       ;; TODO check-input-buffer-empty 函数 在下面
-            ;;       ;; check buffer empty                  
+            ;;       ;; check buffer empty
             ;;       (if (> (buffer-size) 7) ;; god seven
             ;;           (extraction-entry-from-buffer-to-notify))))
-          
+
             (when (check-input-buffer-empty)
               (message "not")
               (progn
@@ -115,7 +115,7 @@
   (> (buffer-size) 0))
 
 (defun check-input-buffer-not-empty ()
-  "检查程序输入 buffer 是否不为空"
+  "检查程序输入 buffer 是否不为空."
   (not (check-input-buffer-empty)))
 
 ;; (defun request-server-get-feed (url)
@@ -139,9 +139,9 @@
 (require 'web)
 (defun request-server-get-feed (url)
   (web-http-get
-   (lambda (httpc header my-data)
+   (lambda (http header my-data)
      (let* ((json-object-type 'plist)
-            (entries (plist-get (json-read-from-string my-data) ':result)))
+            (entries (plist-get (json-read-from-string (decode-coding-string my-data 'utf-8) ) ':result)))
        (feedjs-search-entries-clean)
        (mapcar (lambda (entry2)
                  (feedjs-add-entry entry2))
@@ -185,7 +185,7 @@
     The buffer contains the raw HTTP response sent by the server."
       (switch-to-buffer (current-buffer)))
 
-(my-url-http-post "http://localhost:7788/new-unread/50" '(("GET")))
+;; (my-url-http-post "http://localhost:7788/new-unread/50" '(("GET")))
 
 
 (provide 'emacs-feedjs-interface)

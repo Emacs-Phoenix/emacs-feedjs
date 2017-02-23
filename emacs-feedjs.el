@@ -20,5 +20,4 @@
   (interactive)
   (fetch-feed-by-process))
 
-
 (provide 'emacs-feedjs)
