@@ -13,11 +13,14 @@
       (message "%s" (propertize "feedjs start" 'face '(:foreground "green")))
       (feedjs-search-mode)
       (feedjs-start-process)
-      (feedjs-search-fetch-unread)
-      (feedjs-search-refresh))))
+      (run-at-time "3 sec" 1
+                   (lambda () (progn
+                            (feedjs-search-fetch-unread)
+                            (feedjs-search-refresh)))))))
 
-(defun run-feedjs ()
-  (interactive)
-  (feedjs-start-process))
+(defun feedjs-shuntdown ()
+  "Shount down feedjs."
+  (interactive))
+
 
 (provide 'emacs-feedjs)
