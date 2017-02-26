@@ -1,17 +1,10 @@
 (require 'json)
-
 (require 'request)
-
 (require 'emacs-feedjs-notifiy)
-
-
-(defvar feedjs--process (expand-file-name "NodeAtom/app.js"
-                                          user-emacs-directory))
 
 (defvar feedjs--listen-input-buffer "*FeedJs-Listen-Input*")
 
 (defvar feedjs--process-name "FeedJs")
-
 
 (defvar feedjs--process-var nil)
 
@@ -32,7 +25,7 @@
       t
     nil))
 
-(defun kill-feedjs-process ()
+(defun feedjs-kill-process ()
   (interactive)
   (if feedjs--process-var
       (progn
@@ -41,7 +34,7 @@
         (with-current-buffer feedjs--listen-input-buffer
           (erase-buffer)))))
 
-(defun restart-feedjs-process ()
+(defun feedjs-restart-process ()
   (interactive)
   (kill-feedjs-process)
   (fetch-feed-by-process))
@@ -74,7 +67,6 @@
 ;;                       (extraction-entry-from-buffer)))))))))
 
 (defun extraction-entry-from-buffer (add-fn)
-  (message "exx")
   (save-excursion
     (with-current-buffer feedjs--listen-input-buffer
       (let ((json-object-type 'plist))
