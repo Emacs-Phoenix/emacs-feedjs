@@ -171,16 +171,12 @@
           (insert (propertize "⊙ " 'face 'feedjs-search-ascii-face))
           (insert (propertize date 'face 'feedjs-search-date-face) " ")
           (insert (propertize title-column 'face 'feedjs-search-unread-title-face) "    ")
-          
-          (insert "\n")
           (insert (propertize author 'face 'feedjs-search-author-face))
           (insert "\n"))
       (progn
         (insert (propertize "⊙ " 'face 'feedjs-search-ascii-face-b))
         (insert (propertize date 'face 'feedjs-search-date-face-b) " ")
         (insert (propertize title-column 'face 'feedjs-search-unread-title-face-b) "    ")
-        
-        (insert "\n")
         (insert (propertize author 'face 'feedjs-search-author-face-b))
         (insert "\n")
         ))))
@@ -206,7 +202,7 @@
 (defun feedjs-search-clean ()
   (interactive)
   (feedjs-search-entries-clean)
-  (feedj-search-redraw-all))
+  (feedjs-search-redraw-all))
 
 
 (defun feedjs-search-redraw-all ()

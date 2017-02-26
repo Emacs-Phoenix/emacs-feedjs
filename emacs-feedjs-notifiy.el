@@ -35,7 +35,7 @@
                 (run-at-time t feedjs-notify-interval 'show-notify-to-message)))))
     (message "You must extract entry from input buffer.")))
 
-(defun stop-feedjs-notify ()
+(defun feedjs-stop-notify ()
   (interactive)
   (when notify-timer
     (progn
@@ -43,7 +43,6 @@
       (message "Cancel nofity."))))
 
 (defun extraction-entry-from-buffer-to-notify ()
-  (message "ex")
   (extraction-entry-from-buffer #'add-to-feedjs-notify-queue))
 
 ;; 定时抽取
@@ -56,7 +55,7 @@
       (setq extract-timer
             (run-at-time t 10 'extraction-entry-from-buffer-to-notify)))))
 
-(defun stop-feedjs-extract-timer ()
+(defun feedjs-stop-extract-timer ()
   "Stop feedjs extract timer."
   (interactive)
   (when extract-timer
