@@ -10,14 +10,14 @@
   (switch-to-buffer (feedjs-search-buffer))
   (unless (eq major-mode 'feedjs-search-mode)
     (progn
-      (message "%s" (propertize "☛ feedjs start" 'face '(:foreground "green")))
+      (message "%s" (propertize "feedjs start" 'face '(:foreground "green")))
       (feedjs-search-mode)
-      (fetch-feed-by-process)
+      (feedjs-start-process)
       (feedjs-search-fetch-unread)
       (feedjs-search-refresh))))
 
 (defun run-feedjs ()
   (interactive)
-  (fetch-feed-by-process))
+  (feedjs-start-process))
 
 (provide 'emacs-feedjs)

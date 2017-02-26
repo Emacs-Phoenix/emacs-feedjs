@@ -10,7 +10,7 @@
 
 (defvar server-url "http://localhost:7788")
 
-(defun fetch-feed-by-process ()
+(defun feedjs-start-process ()
   (interactive)
   (if feedjs--process-var
       (message "feedjs readly running")
@@ -36,8 +36,8 @@
 
 (defun feedjs-restart-process ()
   (interactive)
-  (kill-feedjs-process)
-  (fetch-feed-by-process))
+  (feedjs-kill-process)
+  (feedjs-start-process))
 
 ;; 用于抽取 实时加载buffer 中的feed
 ;; (defun extraction-entry-from-buffer ()
@@ -89,7 +89,6 @@
             ;;           (extraction-entry-from-buffer-to-notify))))
 
             (when (check-input-buffer-empty)
-              (message "not")
               (progn
                 (funcall add-fn (plist-get (json-read-from-string (buffer-string))
                                                        ':title))
