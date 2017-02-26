@@ -146,7 +146,6 @@
 
 (defun feedjs-search-entry-print (entry cn)
   "Print ENTRY to the buffer."
-  ;;(substring (plist-get entry ':date) 5 19)
   (let* ((title (plist-get entry ':title))
          (date (if (> (length (plist-get entry ':date)) 10)
                    (substring (plist-get entry ':date) 5 19)
@@ -164,22 +163,13 @@
                                title-width
                                feedjs-search-title-max-width)
                         :left)))
-    (message (number-to-string cn))
-    (message title)
-    (if (= (% cn 2) 0)
-        (progn
-          (insert (propertize "⊙ " 'face 'feedjs-search-ascii-face))
-          (insert (propertize date 'face 'feedjs-search-date-face) " ")
-          (insert (propertize title-column 'face 'feedjs-search-unread-title-face) "    ")
-          (insert (propertize author 'face 'feedjs-search-author-face))
-          (insert "\n"))
-      (progn
-        (insert (propertize "⊙ " 'face 'feedjs-search-ascii-face-b))
-        (insert (propertize date 'face 'feedjs-search-date-face-b) " ")
-        (insert (propertize title-column 'face 'feedjs-search-unread-title-face-b) "    ")
-        (insert (propertize author 'face 'feedjs-search-author-face-b))
-        (insert "\n")
-        ))))
+    (progn
+      (insert (propertize "⊙" 'face 'feedjs-search-ascii-face))
+      (insert (propertize date 'face 'feedjs-search-date-face) " ")
+      (insert (propertize title-column 'face 'feedjs-search-unread-title-face) "    ")
+      (insert (propertize author 'face 'feedjs-search-author-face))
+      (insert "\n"))
+))
 
 
 (defun feedjs-search-show-entry (entry)
