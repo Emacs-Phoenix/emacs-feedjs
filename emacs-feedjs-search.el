@@ -182,7 +182,7 @@
   (let* ((line-index (line-number-at-pos))
          (offset (- line-index feedjs-search--offset)))
     (when (and (>= offset 0) (nth (/ offset 2) feedjs-search-entries))
-      (nth (/ offset 2) feedjs-search-entries))))
+      (nth offset feedjs-search-entries))))
 
 
 (defun feedjs-search-entries-clean ()
