@@ -46,8 +46,6 @@
   "Face used in search mode for tags."
   :group 'feedjs)
 
-
-
 ;;---
 (defface feedjs-search-date-face-b
   '((((class color) (background light)) (:foreground "#aaa" :background "#a0ee76"))
@@ -91,7 +89,7 @@
   :group 'feedjs)
 ;;---
 
-(defvar feedjs-search--offset 2
+(defvar feedjs-search--offset 1
   "Offset between line numbers and entry list position.")
 
 (defvar feedjs-search-entries '())
@@ -147,9 +145,7 @@
 (defun feedjs-search-entry-print (entry cn)
   "Print ENTRY to the buffer."
   (let* ((title (plist-get entry ':title))
-         (date (if (> (length (plist-get entry ':date)) 10)
-                   (substring (plist-get entry ':date) 5 19)
-                 (plist-get entry ':date)))
+         (date (plist-get entry ':date))
          (author (concat (plist-get entry ':author) " "))
          (link (plist-get entry ':link))
          (content (plist-get entry ':content))
@@ -177,11 +173,10 @@
   (when entry
     (feedjs-show-entry entry)))
 
-
 (defun feedjs-search-selected ()
   (let* ((line-index (line-number-at-pos))
          (offset (- line-index feedjs-search--offset)))
-    (when (and (>= offset 0) (nth (/ offset 2) feedjs-search-entries))
+    (when (and (>= offset 0) (nth offset feedjs-search-entries))
       (nth offset feedjs-search-entries))))
 
 
