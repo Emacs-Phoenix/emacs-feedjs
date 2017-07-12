@@ -1,6 +1,6 @@
 (require 'emacs-feedjs-show)
 
-(defvar feedjs-search-show-n 50)
+(defvar feedjs-search-show-n 100)
 
 (defun feedjs-search-buffer ()
   (get-buffer-create "*feedjs-search*"))
@@ -117,6 +117,7 @@
       (define-key map (kbd "RET") 'feedjs-search-show-entry)
       (define-key map (kbd "r") 'feedjs-search-refresh)
       (define-key map (kbd "u") 'feedjs-search-fetch-unread)
+      (define-key map (kbd "x") 'feedjs-search-mark-atom-has-read)
       (define-key map "m" 'feedjs-search-show-entry))))
 
 (defun feedjs-search-mode ()
@@ -214,5 +215,12 @@
 (defun feedjs-search-new ()
   (interactive)
   (new-feed-from-server-url feedjs-search-show-n))
+
+(defun feedjs-search-mark-atom-has-read (entry)
+  (interactive (list (feedjs-search-selected)))
+  (when entry
+    (mark-atom-has-read (plist-get entry ':id))))
+
+;; (title (plist-get entry ':title))
 
 (provide 'emacs-feedjs-search)

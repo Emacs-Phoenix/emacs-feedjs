@@ -1,6 +1,7 @@
 (require 'json)
 (require 'request)
 (require 'emacs-feedjs-notifiy)
+(require 'web)
 
 (defvar feedjs--listen-input-buffer "*FeedJs-Listen-Input*")
 
@@ -8,7 +9,7 @@
 
 (defvar feedjs--process-var nil)
 
-(defvar server-url "http://localhost:7788")
+(defvar server-url "http://localhost:8888")
 
 (defun feedjs-start-process ()
   (interactive)
@@ -64,7 +65,7 @@
   "检查程序输入 buffer 是否不为空."
   (not (check-input-buffer-empty)))
 
-(require 'web)
+
 (defun request-server-get-feed (url)
   (web-http-get
    (lambda (http header my-data)
@@ -80,34 +81,14 @@
   (request-server-get-feed
    (concat server-url "/new/" (number-to-string number))))
 
+(defun mark-atom-has-read (id)
+  (web-http-post
+   (lambda (con header data)
+     (message "data received is: %s" data))
+   :url (concat server-url "/unread/" (number-to-string id))))
+
 (defun new-unread-feed-from-server-url (number)
   (request-server-get-feed
    (concat server-url "/new-unread/" (number-to-string number))))
-
-(defun my-url-http-post (url args)
-      "Send ARGS to URL as a POST request."
-      (let ((url-request-method "GET")
-            (url-request-extra-headers
-             '(("Content-Type" . "application/x-www-form-urlencoded")))
-            (url-request-data
-             (mapconcat (lambda (arg)
-                          (concat (url-hexify-string (car arg))
-                                  "="
-                                  (url-hexify-string (cdr arg))))
-                        args
-                        "&")))
-        ;; if you want, replace `my-switch-to-url-buffer' with `my-kill-url-buffer'
-        (url-retrieve url 'my-switch-to-url-buffer)))
-
-    (defun my-kill-url-buffer (status)
-      "Kill the buffer returned by `url-retrieve'."
-      (kill-buffer (current-buffer)))
-
-    (defun my-switch-to-url-buffer (status)
-      "Switch to the buffer returned by `url-retreive'.
-    The buffer contains the raw HTTP response sent by the server."
-      (switch-to-buffer (current-buffer)))
-
-;; (my-url-http-post "http://localhost:7788/new-unread/50" '(("GET")))
 
 (provide 'emacs-feedjs-interface)

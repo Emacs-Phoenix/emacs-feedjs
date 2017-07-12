@@ -12,6 +12,8 @@
     (progn
       (message "%s" (propertize "feedjs start" 'face '(:foreground "green")))
       (feedjs-search-mode)
+      (feedjs-search-fetch-unread)
+      (run-at-time "5 sec" nil #'feedjs-search-refresh)
       ;; (feedjs-start-process)
       ;; (run-at-time "3 sec" nil
       ;;              (lambda () (progn
