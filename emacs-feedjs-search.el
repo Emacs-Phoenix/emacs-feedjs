@@ -1,92 +1,11 @@
 (require 'emacs-feedjs-show)
+(require 'emacs-feedjs-face)
 
 (defvar feedjs-search-show-n 100)
 
 (defun feedjs-search-buffer ()
   (get-buffer-create "*feedjs-search*"))
 
-(defface feedjs-search-date-face
-  '((((class color) (background light)) (:foreground "#aaa"))
-    (((class color) (background dark))  (:foreground "#77a")))
-  "Face used in search mode for dates."
-  :group 'feedjs)
-
-(defface feedjs-search-title-face
-  '((((class color) (background light)) (:foreground "#000"))
-    (((class color) (background dark))  (:foreground "#fff")))
-  "Face used in search mode for titles."
-  :group 'feedjs)
-
-(defface feedjs-search-unread-title-face
-  '((t :inherit feedjs-search-title-face :weight bold))
-  "Face used in search mode for unread entry titles."
-  :group 'feedjs)
-
-(defface feedjs-search-author-face
-  '((((class color) (background light)) (:foreground "#aa0"))
-    (((class color) (background dark))  (:foreground "#982Baa")))
-  "Face used in search mode for feed titles."
-  :group 'feedjs)
-
-(defface feedjs-search-feed-face
-  '((((class color) (background light)) (:foreground "#aa0"))
-    (((class color) (background dark))  (:foreground "#ff0")))
-  "Face used in search mode for feed titles."
-  :group 'feedjs)
-
-(defface feedjs-search-tag-face
-  '((((class color) (background light)) (:foreground "#070"))
-    (((class color) (background dark))  (:foreground "#0f0")))
-  "Face used in search mode for tags."
-  :group 'feedjs)
-
-(defface feedjs-search-ascii-face
-  '((((class color) (background light)) (:foreground "#070"))
-    (((class color) (background dark))  (:foreground "#25E70f")))
-  "Face used in search mode for tags."
-  :group 'feedjs)
-
-;;---
-(defface feedjs-search-date-face-b
-  '((((class color) (background light)) (:foreground "#aaa" :background "#a0ee76"))
-    (((class color) (background dark))  (:foreground "#77a" :background "#a0ee76")))
-  "Face used in search mode for dates."
-  :group 'feedjs)
-
-(defface feedjs-search-title-face-b
-  '((((class color) (background light)) (:foreground "#000" :background "#a0ee76"))
-    (((class color) (background dark))  (:foreground "#fff" :background "#a0ee76")))
-  "Face used in search mode for titles."
-  :group 'feedjs)
-
-(defface feedjs-search-unread-title-face-b
-  '((t :inherit feedjs-search-title-face :weight bold :background "#a0ee76"))
-  "Face used in search mode for unread entry titles."
-  :group 'feedjs)
-
-(defface feedjs-search-author-face-b
-  '((((class color) (background light)) (:foreground "#aa0" :background "#a0ee76"))
-    (((class color) (background dark))  (:foreground "#982Baa" :background "#a0ee76")))
-  "Face used in search mode for feed titles."
-  :group 'feedjs)
-
-(defface feedjs-search-feed-face-b
-  '((((class color) (background light)) (:foreground "#aa0" :background "#a0ee76"))
-    (((class color) (background dark))  (:foreground "#ff0" :background "#a0ee76")))
-  "Face used in search mode for feed titles."
-  :group 'feedjs)
-
-(defface feedjs-search-tag-face-b
-  '((((class color) (background light)) (:foreground "#070" :background "#a0ee76"))
-    (((class color) (background dark))  (:foreground "#0f0" :background "#a0ee76")))
-  "Face used in search mode for tags."
-  :group 'feedjs)
-
-(defface feedjs-search-ascii-face-b
-  '((((class color) (background light)) (:foreground "#070" :background "#a0ee76"))
-    (((class color) (background dark))  (:foreground "#25E70f" :background "#a0ee76")))
-  "Face used in search mode for tags."
-  :group 'feedjs)
 ;;---
 
 (defvar feedjs-search--offset 1
@@ -116,8 +35,11 @@
       (define-key map "q" 'quit-window)
       (define-key map (kbd "RET") 'feedjs-search-show-entry)
       (define-key map (kbd "r") 'feedjs-search-refresh)
+      (define-key map (kbd "j") 'feedjs-jump-to-atom-href)
+      (define-key map (kbd "C-x C-s") (lambda (message "can not save")))
       (define-key map (kbd "u") 'feedjs-search-fetch-unread)
       (define-key map (kbd "x") 'feedjs-search-mark-atom-has-read)
+      (define-key map (kbd "k") 'feedjs-search-mark-atom-has-read)
       (define-key map "m" 'feedjs-search-show-entry))))
 
 (defun feedjs-search-mode ()
@@ -174,6 +96,11 @@
   (when entry
     (feedjs-show-entry entry)))
 
+(defun feedjs-jump-to-atom-href (entry)
+  (interactive (list (feedjs-search-selected)))
+  (when entry
+    (browse-url (plist-get entry ':link))))
+
 (defun feedjs-search-selected ()
   (let* ((line-index (line-number-at-pos))
          (offset (- line-index feedjs-search--offset 1)))
@@ -221,7 +148,6 @@
   (let ((line-index (line-number-at-pos)))
     (when entry
       (progn
-        (message (number-to-string line-index))
         (mark-atom-has-read (plist-get entry ':id))
         (setf feedjs-search-entries (delete entry feedjs-search-entries))
         (feedjs-search-refresh)

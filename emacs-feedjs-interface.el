@@ -1,7 +1,9 @@
 (require 'json)
 (require 'request)
 (require 'emacs-feedjs-notifiy)
+(require 'emacs-feedjs-face)
 (require 'web)
+
 
 (defvar feedjs--listen-input-buffer "*FeedJs-Listen-Input*")
 
@@ -9,7 +11,9 @@
 
 (defvar feedjs--process-var nil)
 
-(defvar server-url "http://localhost:8888")
+
+(defvar server-address "localhost:7788")
+(defvar server-url (concat "http://" server-address))
 
 (defun feedjs-start-process ()
   (interactive)
@@ -65,7 +69,6 @@
   "检查程序输入 buffer 是否不为空."
   (not (check-input-buffer-empty)))
 
-
 (defun request-server-get-feed (url)
   (web-http-get
    (lambda (http header my-data)
@@ -84,7 +87,7 @@
 (defun mark-atom-has-read (id)
   (web-http-post
    (lambda (con header data)
-     (message "data received is: %s" data))
+     data)
    :url (concat server-url "/unread/" (number-to-string id))))
 
 (defun new-unread-feed-from-server-url (number)
