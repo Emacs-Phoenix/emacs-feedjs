@@ -218,11 +218,14 @@
 
 (defun feedjs-search-mark-atom-has-read (entry)
   (interactive (list (feedjs-search-selected)))
-  (when entry
-    (progn
-      (mark-atom-has-read (plist-get entry ':id))
-      (setf feedjs-search-entries (delete entry feedjs-search-entries))
-      (feedjs-search-refresh)
-      )))
+  (let ((line-index (line-number-at-pos)))
+    (when entry
+      (progn
+        (message (number-to-string line-index))
+        (mark-atom-has-read (plist-get entry ':id))
+        (setf feedjs-search-entries (delete entry feedjs-search-entries))
+        (feedjs-search-refresh)
+        (forward-line (- line-index 1))
+        ))))
 
 (provide 'emacs-feedjs-search)
