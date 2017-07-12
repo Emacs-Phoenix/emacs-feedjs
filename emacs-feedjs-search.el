@@ -145,7 +145,7 @@
 (defun feedjs-search-entry-print (entry cn)
   "Print ENTRY to the buffer."
   (let* ((title (plist-get entry ':title))
-         (date (plist-get entry ':date))
+         ;; (date (plist-get entry ':date))
          (author (concat (plist-get entry ':author) " "))
          (link (plist-get entry ':link))
          (content (plist-get entry ':content))
@@ -161,7 +161,7 @@
                         :left)))
     (progn
       (insert (propertize "⊙" 'face 'feedjs-search-ascii-face))
-      (insert (propertize date 'face 'feedjs-search-date-face) " ")
+      ;; (insert (propertize date 'face 'feedjs-search-date-face) " ")
       (insert (propertize title-column 'face 'feedjs-search-unread-title-face) "    ")
       (insert (propertize author 'face 'feedjs-search-author-face))
       (insert "\n"))
@@ -175,10 +175,9 @@
 
 (defun feedjs-search-selected ()
   (let* ((line-index (line-number-at-pos))
-         (offset (- line-index feedjs-search--offset)))
+         (offset (- line-index feedjs-search--offset 1)))
     (when (and (>= offset 0) (nth offset feedjs-search-entries))
       (nth offset feedjs-search-entries))))
-
 
 (defun feedjs-search-entries-clean ()
   (with-current-buffer (feedjs-search-buffer)
@@ -188,7 +187,6 @@
   (interactive)
   (feedjs-search-entries-clean)
   (feedjs-search-redraw-all))
-
 
 (defun feedjs-search-redraw-all ()
   (interactive)

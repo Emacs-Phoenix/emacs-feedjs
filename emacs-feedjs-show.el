@@ -29,7 +29,7 @@
 
 (defun feedjs-show-entry (entry)
   (let* ((title (plist-get entry ':title))
-         (date (substring (plist-get entry ':date) 5 19))
+         ;; (date (plist-get entry ':date))
          (author (concat (plist-get entry ':author) " "))
          (link (plist-get entry ':link))
          (content (plist-get entry ':content))
@@ -85,7 +85,7 @@
   (interactive)
   (let* ((inhibit-read-only t)
          (title (plist-get entry ':title))
-         (date (substring (plist-get entry ':date) 5 19))
+         ;; (date (plist-get entry ':date))
          (author (concat (plist-get entry ':author) " "))
          (link (plist-get entry ':link))
          (content (plist-get entry ':content))
@@ -102,8 +102,8 @@
     (erase-buffer)
     (insert (format (propertize "Title: %s\n" 'face 'message-header-name)
                     (propertize title 'face 'message-header-subject)))
-    (insert (format (propertize "Date: %s\n" 'face 'message-header-name)
-                    (propertize date 'face 'message-header-other)))
+    ;; (insert (format (propertize "Date: %s\n" 'face 'message-header-name)
+    ;;                 (propertize date 'face 'message-header-other)))
 
     (insert (propertize "Link: " 'face 'message-header-name))
 
